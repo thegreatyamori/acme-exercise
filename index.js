@@ -4,20 +4,17 @@
 
 // declare modules
 
-const fs = require('fs');
-const globals = require('./globals');
-const utils = require('./src/utils');
+const fs = require("fs");
+const Input = require("./src/Input");
 
 // read file, return string
 
 fs.readFile("employees.txt", "utf-8", (err, data) => {
   if (err) {
-    console.error("Error: ", err);
+    throw err;
   } else {
+    const input = new Input(data);
 
-    // create a regex to test input
-
-    console.log(utils.testInput(data, globals.reg, "gm"));
-
+    input.process();
   }
 });
