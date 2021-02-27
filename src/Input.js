@@ -6,6 +6,8 @@
 
 const globals = require("../globals");
 const utils = require("./utils");
+const Employee = require("./Employee");
+const WeekHour = require("./Hour");
 
 class Input {
   constructor(data) {
@@ -17,7 +19,7 @@ class Input {
    * @returns a boolean value
    */
   isValid() {
-    return utils.testInput(this.data, globals.INPUT_REGEX, "gm");
+    return utils.checkInput(this.data, globals.INPUT_REGEX, "gm");
   }
 
   /**
@@ -26,9 +28,18 @@ class Input {
   process() {
     console.log(this.isValid());
     if (this.isValid()) {
-      // split data & send to Employee
-      return this.data.split("\n");
-      // [].forEach
+      // split data
+      let _data_employees = this.data.split("\n");
+
+      // send to Employee
+      _data_employees.forEach((data) => {
+        // create Employee Object
+        const employee = new Employee(data);
+        let work_hours = employee.getWeekHours();
+
+        console.log("NAME: ", employee.getName());
+        console.log(week_hours);
+      });
     } else {
       // TODO: Complete this
       throw err;
@@ -37,11 +48,3 @@ class Input {
 }
 
 module.exports = Input;
-
-
-
-// Hour
-//   calcWorkingHours
-//   findRangePrice
-// Day
-//   findPrice

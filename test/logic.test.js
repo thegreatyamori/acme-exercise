@@ -1,4 +1,22 @@
+const Employee = require("../src/Employee");
+const Hour = require("../src/Hour");
+
 describe("Logic Bussiness", () => {
+  test("should format input data ", () => {
+    const input = ["MERCY=MO4:00-10:00,TH14:00-18:00,SA10:00-05:00"];
+    const output = {
+      MO: ["4:00", "10:00"],
+      TH: ["14:00", "18:00"],
+      SA: ["10:00", "05:00"],
+    };
+
+    input.forEach((item) => {
+      const employee_test = new Employee(item);
+
+      expect(employee_test.getWeekHours()).toEqual(output);
+    });
+  });
+
   test("should calculate the working hours", () => {
     // RENE=MO10:00-12:00,TU10:00-12:00,TH01:00-03:00,SA14:00-18:00,SU20:00-21:00
     // input separa el string en employees, luego envia los datos de cada employee por separado
@@ -16,33 +34,25 @@ describe("Logic Bussiness", () => {
       SU: ["20:00", "21:00"],
     };
 
-    let output = { MO: 2, TU: 2, TH: 2, SA: 4, SU: 1 };
+    let output = {
+      MO: [0, 2, 0], // second_range
+      TU: [0, 2, 0], // second_range
+      TH: [2, 0, 0], // first_range
+      SA: [0, 4, 0], // second_range
+      SU: [0, 0, 1], // third_range
+    };
 
-    expect(calcWorkingHours(input)).toEqual(output);
+    const hour_test = new Hour(input);
+
+    expect(hour_test.calcWorkingHours()).toEqual(output);
   });
 
-  describe("should find the price per hour according to the range", () => {
-    test("should find the range: 0,1,3", () => {
-      let input = {
-        MO: ["10:00", "12:00"],
-        TU: ["10:00", "12:00"],
-        TH: ["01:00", "03:00"],
-        SA: ["14:00", "18:00"],
-        SU: ["20:00", "21:00"],
-      };
+  test("should find the price based by day", () => {
+    let input = { MO: 1, TU: 1, TH: 0, SA: 2, SU: 0 };
 
-      let output = { MO: 1, TU: 1, TH: 0, SA: 2, SU: 0 };
+    let output = { MO: 15, TU: 15, TH: 25, SA: 20, SU: 25 };
 
-      expect(findRangePrice(input)).toEqual(output);
-    });
-
-    test("should find the price based by day", () => {
-      let input = { MO: 1, TU: 1, TH: 0, SA: 2, SU: 0 };
-
-      let output = { MO: 15, TU: 15, TH: 25, SA: 20, SU: 25 };
-
-      expect(findPrice(input)).toEqual(output);
-    });
+    expect(findPrice(input)).toEqual(output);
   });
 
   // test("should associate the price according to the day of the week", () => {});
