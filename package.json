@@ -4,7 +4,7 @@
   "description": "This is an exercise to test technical skills for the Ioet developer job. I enjoyed this time thinking and writing code. This exercise is to build a way to pay employees based on a table of prices and working hours.",
   "main": "index.js",
   "scripts": {
-    "start": "node --experimental-modules index.js",
+    "start": "node index.js",
     "test": "jest"
   },
   "keywords": [

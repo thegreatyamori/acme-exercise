@@ -6,15 +6,43 @@
 
 const fs = require("fs");
 const Input = require("./src/Input");
+const readline = require("readline");
+const { exec } = require("child_process");
 
-// read file, return string
+// read input & process
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
-fs.readFile("employees.txt", "utf-8", (err, data) => {
+// clear screen
+exec("cls", (err, stdout, stderr) => {
   if (err) {
-    throw err;
-  } else {
-    const input = new Input(data);
-
-    input.process();
+    console.log(`error: ${err.message}`);
+    return;
   }
+  if (stderr) {
+    console.log(`stderr: ${stderr}`);
+    return;
+  }
+
+  fs.readFile("init.txt", "utf-8", (err, data) => {
+    if (err) throw err;
+    // print init.txt
+    console.log(data);
+
+    rl.question(`Path (employees.txt): `, (file) => {
+      // read file, return string
+      if (file === "") file = "employees.txt"
+
+      fs.readFile(file, "utf-8", (err, data) => {
+        if (err) throw err;
+        const input = new Input(data);
+
+        input.process();
+      });
+
+      rl.close();
+    });
+  });
 });
