@@ -8,6 +8,8 @@ const globals = require("../globals");
 const utils = require("./utils");
 const Employee = require("./Employee");
 const WeekHour = require("./Hour");
+const Price = require("./Price");
+const Output = require("./output");
 
 class Input {
   constructor(data) {
@@ -26,7 +28,6 @@ class Input {
    * process input & send data to employee
    */
   process() {
-    console.log(this.isValid());
     if (this.isValid()) {
       // split data
       let _data_employees = this.data.split("\n");
@@ -35,14 +36,18 @@ class Input {
       _data_employees.forEach((data) => {
         // create Employee Object
         const employee = new Employee(data);
-        let work_hours = employee.getWeekHours();
+        const work_hours = employee.getWeekHours();
 
         // create Hour Object
         const _week_hours = new WeekHour(work_hours);
-        let week_hours = _week_hours.findRangePrice();
+        const week_hours = _week_hours.findRangePrice();
 
-        console.log("NAME: ", employee.getName());
-        console.log(week_hours);
+        // calculate total
+        const total = Price.total(week_hours);
+
+        // print output
+
+        Output.print(employee.getName(), total);
       });
     } else {
       // TODO: Complete this

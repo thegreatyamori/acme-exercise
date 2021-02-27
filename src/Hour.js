@@ -53,6 +53,3 @@ class Hour {
 }
 
 module.exports = Hour;
-
-// Day
-//   findPrice

@@ -16,6 +16,22 @@ class Price {
     return this.calcPrices();
   }
 
+  /**
+   * Calculates the total pay for weekly
+   * working hours for an employee.
+   * @param {Object} prices An object of prices per day `{day: price,...}`
+   * @returns {Number} Number
+   */
+  static total(prices) {
+    let sum_total = 0;
+
+    for (const key in prices) {
+      sum_total += prices[key];
+    }
+
+    return sum_total;
+  }
+
   calcPrices() {
     let _total_price = 0;
 
