@@ -31,9 +31,9 @@ exec("cls", (err, stdout, stderr) => {
     // print init.txt
     console.log(data);
 
-    rl.question(`Path (employees.txt): `, (file) => {
+    rl.question(`Path (test/employees.txt): `, (file) => {
       // read file, return string
-      if (file === "") file = "employees.txt"
+      if (file === "") file = "test/employees.txt"
 
       fs.readFile(file, "utf-8", (err, data) => {
         if (err) throw err;
