@@ -12,7 +12,8 @@
  '----------------'  '----------------'  '----------------'  '----------------' 
 ```
 
-![github action](https://github.com/thegreatyamori/acme-exercise/workflows/tests/badge.svg)
+![github action](https://github.com/thegreatyamori/acme-exercise/actions/workflows/node.js.yml/badge.svg)
+
 [![made-for-VSCode](https://img.shields.io/badge/Made%20for-VSCode-1f425f.svg)](https://code.visualstudio.com/)
 
 Hello !
