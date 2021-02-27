@@ -39,8 +39,7 @@ class Input {
 
         // create Hour Object
         const _week_hours = new WeekHour(work_hours);
-        let week_hours = _week_hours.calcWorkingHours();
-        // _week_hours.findRangePrice();
+        let week_hours = _week_hours.findRangePrice();
 
         console.log("NAME: ", employee.getName());
         console.log(week_hours);

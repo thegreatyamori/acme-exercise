@@ -48,11 +48,17 @@ describe("Logic Bussiness", () => {
   });
 
   test("should find the price based by day", () => {
-    let input = { MO: 1, TU: 1, TH: 0, SA: 2, SU: 0 };
+    let input = {
+      MO: ["18:00", "23:00"],
+      TH: ["00:01", "09:00"],
+      SA: ["09:01", "12:00"],
+    };
 
-    let output = { MO: 15, TU: 15, TH: 25, SA: 20, SU: 25 };
+    let output = { MO: 100, TH: 225, SA: 60 };
+    
+    const hour_test = new Hour(input);
 
-    expect(findPrice(input)).toEqual(output);
+    expect(hour_test.findRangePrice()).toEqual(output);
   });
 
   // test("should associate the price according to the day of the week", () => {});

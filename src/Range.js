@@ -15,42 +15,41 @@ class Range {
 
     for (const key in _range) {
       const [s_time, f_time] = _range[key];
-      this.range_dates = [...this.range_dates, utils.createDate(s_time, day)];
-      this.range_dates = [...this.range_dates, utils.createDate(f_time, day)];
+      this.range_dates = [
+        ...this.range_dates,
+        utils.createDate(s_time, day),
+        utils.createDate(f_time, day),
+      ];
     }
   }
 
   getHoursByRange(first_date, second_date) {
     // calculate indexes where to put dates
-    let pos_init = this.greaterThan(first_date);
-    let pos_end = this.lessThan(second_date);
+    let pos_init = utils.lessThan(first_date, 0, this.range_dates);
+    let pos_end = utils.lessThan(second_date, 1, this.range_dates);
 
     // calculate the hours of each range and store in an array
-    return this.calcHour(pos_init, pos_end, first_date, second_date);
+    return this.calcHoursPerDay(pos_init, pos_end, first_date, second_date);
   }
 
-  greaterThan(date) {
-    const _ranges = [...this.range_dates];
-    const rule = (item) => date < item || date.getTime() == item.getTime();
 
-    return _ranges.findIndex(rule) - 1;
-  }
-
-  lessThan(date) {
-    const _ranges = [...this.range_dates];
-    const rule = (item) => date < item || date.getTime() == item.getTime();
-
-    return _ranges.findIndex(rule);
-  }
-
-  calcHour(pos_init, pos_end, init_date, end_date) {
+  /**
+   * Determine the hours of work in the week.
+   * @param {Number} pos_init
+   * @param {Number} pos_end
+   * @param {Date} init_date
+   * @param {Date} end_date
+   * @returns  an Array `[hour,hour,hour]` where each index is
+   * associate with price `[25,15,20]`
+   */
+  calcHoursPerDay(pos_init, pos_end, init_date, end_date) {
     let _ranges = [...this.range_dates];
     let _work_hours = [];
 
     // replace strings in _ranges
     _ranges.splice(pos_init, 1, init_date);
     _ranges.splice(pos_end, 1, end_date);
-    
+
     // console.log(pos_init, pos_end);
 
     let [a, b, c, d, e, f] = _ranges;

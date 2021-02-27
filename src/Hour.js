@@ -5,6 +5,7 @@
 // declare modules
 const utils = require("./utils");
 const Range = require("./Range");
+const Price = require("./Price");
 
 class Hour {
   constructor(data) {
@@ -34,7 +35,21 @@ class Hour {
     return work_hours;
   }
 
-  findRangePrice() {}
+  findRangePrice() {
+    let _week_hours = { ...this.calcWorkingHours() };
+    // create empty object
+    let _week_total_price = Object.create({});
+
+    for (const day in _week_hours) {
+      const _day_hours = _week_hours[day];
+
+      const price = new Price(day, _day_hours);
+
+      _week_total_price[day] = price.calc;
+    }
+
+    return _week_total_price;
+  }
 }
 
 module.exports = Hour;

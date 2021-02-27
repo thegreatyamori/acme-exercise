@@ -49,3 +49,18 @@ exports.createDate = (time, day = "MO") => {
 
   return date;
 };
+
+/**
+ * Returns an index where the given date is less
+ * than the evaluated date in an array
+ * @param {Date} date The current date
+ * @param {Number} position The position of date: init-end
+ * @param {Array} _range_dates The dates array
+ */
+exports.lessThan = (date, position, _range_dates) => {
+  const _ranges = [..._range_dates];
+  const rule = (item) => date < item || date.getTime() == item.getTime();
+  const index = _ranges.findIndex(rule);
+
+  return position === 0 ? index - 1 : index;
+};
