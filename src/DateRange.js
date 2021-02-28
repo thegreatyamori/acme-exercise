@@ -1,37 +1,49 @@
-// ---------------------------
-// Author: Jerson Morocho
-// ---------------------------
+/**
+ * @author Jerson Morocho
+ */
 
 // declare modules
 const utils = require("./utils");
 const globals = require("../globals");
 
-class Range {
+/**
+ * DateRange works like this  
+ *
+ * In the constructor an array is created with the
+ * ranges of workhours converted to dates.
+ *
+ * ```
+ * {                                |=> ["2021-02-27 00:01",
+ *    range_1: ["00:01", "09:00"],  |=> "2021-02-27 09:00",
+ *    range_2: ["09:01", "18:00"],  |=> "2021-02-27 09:01",
+ *    range_3: ["18:01", "00:00"],  |=> "2021-02-27 18:00",
+ * };                               |=> "2021-02-27 18:01",
+ *                                  |=> "2021-02-27 00:00"]
+ * ```
+ *
+ * This array is updated with the same date for each daily
+ * working hour.
+ * 
+ * The purpose is to replace in this array the start and
+ * end time to simplify the exact calculation of hours
+ * worked in a day, also allowing to work with a shared
+ * range of schedules.
+ * 
+ */
+class DateRange {
   range_dates = [];
 
   constructor(day) {
-    // parse start & finish time to Dates Array
-    const _range = globals.RANGE_HOURS;
-
-    for (const key in _range) {
-      const [s_time, f_time] = _range[key];
-      this.range_dates = [
-        ...this.range_dates,
-        utils.createDate(s_time, day),
-        utils.createDate(f_time, day),
-      ];
-    }
+    let _ranges  = Object.values(globals.RANGE_HOURS);
+    this.range_dates = utils.transformToDates(_ranges,day);
   }
 
-  getHoursByRange(first_date, second_date) {
-    // calculate indexes where to put dates
-    let pos_init = utils.lessThan(first_date, 0, this.range_dates);
-    let pos_end = utils.lessThan(second_date, 1, this.range_dates);
+  getHoursByRange(init_date, end_date) {
+    let positions = utils.replacementIndexes(init_date, end_date, this.range_dates);
 
     // calculate the hours of each range and store in an array
-    return this.calcHoursPerDay(pos_init, pos_end, first_date, second_date);
+    return this.calcHoursPerDay(positions, init_date, end_date);
   }
-
 
   /**
    * Determine the hours of work in the week.
@@ -42,7 +54,7 @@ class Range {
    * @returns  an Array `[hour,hour,hour]` where each index is
    * associate with price `[25,15,20]`
    */
-  calcHoursPerDay(pos_init, pos_end, init_date, end_date) {
+  calcHoursPerDay([pos_init, pos_end], init_date, end_date) {
     let _ranges = [...this.range_dates];
     let _work_hours = [];
 
@@ -50,7 +62,6 @@ class Range {
     _ranges.splice(pos_init, 1, init_date);
     _ranges.splice(pos_end, 1, end_date);
 
-    // console.log(pos_init, pos_end);
 
     let [a, b, c, d, e, f] = _ranges;
     let hour;
@@ -141,4 +152,4 @@ class Range {
   }
 }
 
-module.exports = Range;
+module.exports = DateRange;

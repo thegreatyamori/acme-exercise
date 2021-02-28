@@ -11,7 +11,7 @@ describe("Input", () => {
       "JOSE=MO1:00-3:00,TH14:00-11:00,SA10:00-05:00\n" +
       "ALBERTO=MO7:00-11:00,TU14:00-16:00,TH12:00-16:00";
 
-    expect(utils.checkInput(input, globals.INPUT_REGEX, "gm")).toBeFalsy();
+    expect(utils.isValidInput(input)).toBeFalsy();
   });
 
   test("Should Check if you enter wrong range of hours", () => {
@@ -23,13 +23,13 @@ describe("Input", () => {
       "JOSE=MO1:00-3:00,TH14:00-11:00,SA10:00-05:00\n" +
       "ALBERTO=MO7:00-11:00,TU14:00-16:00,TH12:00-16:00";
 
-    expect(utils.checkInput(input, globals.INPUT_REGEX, "gm")).toBeFalsy();
+    expect(utils.isValidInput(input)).toBeFalsy();
   });
 
   test("Should Check if nothing is entered", () => {
     const input = "";
 
-    expect(utils.checkInput(input, globals.INPUT_REGEX, "gm")).toBeFalsy();
+    expect(utils.isValidInput(input)).toBeFalsy();
   });
 
   test("Should check if entered in a different format", () => {
@@ -41,7 +41,7 @@ describe("Input", () => {
       "JOSE=MO1:00-3:00;TH14:00-11:00;SA10:00-05:00\n" +
       "ALBERTO=MO7:00-11:00;TU14:00-16:00;TH12:00-16:00";
 
-    expect(utils.checkInput(input, globals.INPUT_REGEX, "gm")).toBeFalsy();
+    expect(utils.isValidInput(input)).toBeFalsy();
   });
 
   test("Should check for correct data entry", () => {
@@ -53,6 +53,6 @@ describe("Input", () => {
       "JOSE=MO1:00-3:00,TH14:00-11:00,SA10:00-05:00\n" +
       "ALBERTO=MO7:00-11:00,TU14:00-16:00,TH12:00-16:00";
 
-    expect(utils.checkInput(input, globals.INPUT_REGEX, "gm")).toBeTruthy();
+    expect(utils.isValidInput(input)).toBeTruthy();
   });
 });

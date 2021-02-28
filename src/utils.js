@@ -1,6 +1,6 @@
-// ---------------------------
-// Author: Jerson Morocho
-// ---------------------------
+/**
+ * @author Jerson Morocho
+ */
 
 // declare modules
 const globals = require("../globals");
@@ -11,7 +11,7 @@ const globals = require("../globals");
  * @param {RegExp} regex Receive a `RegExp` Object
  * @param {String} flags Receive a `string` object of regex flags. Default `global`
  */
-exports.checkInput = (data, regex, flags = "g") => {
+exports.isValidInput = (data, regex = globals.INPUT_REGEX, flags = "gm") => {
   if (data === "") return false;
 
   let reg = new RegExp(regex, flags);
@@ -50,17 +50,50 @@ exports.createDate = (time, day = "MO") => {
   return date;
 };
 
+exports.replacementIndexes = (init_date, end_date, _range_dates) => {
+  const _ranges = [..._range_dates];
+  let pos_init = this.lessThan(init_date, _ranges);
+  let pos_end = this.lessThan(end_date, _ranges);
+
+  return [pos_init - 1, pos_end];
+};
+
 /**
  * Returns an index where the given date is less
  * than the evaluated date in an array
  * @param {Date} date The current date
  * @param {Number} position The position of date: init-end
- * @param {Array} _range_dates The dates array
+ * @param {Array} _range The dates array
  */
-exports.lessThan = (date, position, _range_dates) => {
-  const _ranges = [..._range_dates];
-  const rule = (item) => date < item || date.getTime() == item.getTime();
-  const index = _ranges.findIndex(rule);
+exports.lessThan = (date, _ranges) => {
+  const rule = (item) => date < item ||date.getTime() == item.getTime();
+  return _ranges.findIndex(rule);
+};
 
-  return position === 0 ? index - 1 : index;
+/**
+ * Get the price by day of week
+ * @param {String} day the reference day
+ * @param {*} index an index to help locate the exact price
+ * @returns {Number} base price
+ */
+exports.getPriceByDayOfWeek = (day, index) => {
+  switch (day) {
+    case "MO":
+    case "TU":
+    case "WE":
+    case "TH":
+    case "FR":
+      return globals.PRICES[index];
+    case "SA":
+    case "SU":
+      return globals.PRICES[index] + 5;
+    default:
+      break;
+  }
+};
+
+exports.transformToDates = (_ranges, day) => {
+  return _ranges
+    .reduce((a, b) => a.concat(b))
+    .map((x) => this.createDate(x, day));
 };

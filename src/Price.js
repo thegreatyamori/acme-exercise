@@ -1,19 +1,14 @@
-// ---------------------------
-// Author: Jerson Morocho
-// ---------------------------
+/**
+ * @author Jerson Morocho
+ */
 
 // declare modules
-const utils = require("./utils");
-const globals = require("../globals");
+const utils = require('./utils');
 
 class Price {
   constructor(day, indexes) {
     this.day = day;
     this.indexes = indexes;
-  }
-
-  get calc() {
-    return this.calcPrices();
   }
 
   /**
@@ -32,39 +27,22 @@ class Price {
     return sum_total;
   }
 
+  /**
+   * calculates the total price per workday
+   * @returns {Number} Number
+   */
   calcPrices() {
-    let _total_price = 0;
+    let total_price = 0;
 
-    this.indexes.forEach((value, index) => {
-      let price = this.priceByDayOfWeekAndIndex(this.day, index);
-      _total_price += price * value;
+    this.indexes.forEach((hour, index) => {
+      let price = utils.getPriceByDayOfWeek(this.day, index);
+
+      total_price += price * hour;
     });
 
-    return _total_price;
+    return total_price;
   }
 
-  priceByDayOfWeekAndIndex(day, index) {
-    let price;
-    const prices = globals.PRICES;
-
-    switch (day) {
-      case "MO":
-      case "TU":
-      case "WE":
-      case "TH":
-      case "FR":
-        price = prices[index];
-        break;
-      case "SA":
-      case "SU":
-        price = prices[index] + 5;
-        break;
-      default:
-        break;
-    }
-
-    return price;
-  }
 }
 
 module.exports = Price;

@@ -1,10 +1,10 @@
-// ---------------------------
-// Author: Jerson Morocho
-// ---------------------------
+/**
+ * @author Jerson Morocho
+ */
 
 // declare modules
 const utils = require("./utils");
-const Range = require("./Range");
+const DateRange = require("./DateRange");
 const Price = require("./Price");
 
 class Hour {
@@ -12,43 +12,46 @@ class Hour {
     this.data = data;
   }
 
-  calcWorkingHours() {
-    // create empty object
-    let work_hours = Object.create({});
+  /**
+   * calculates working hours by time range
+   * @returns {Object}
+   */
+  calcWorkHours() {
+    let workhours = Object.create({});
 
     for (let day in this.data) {
-      // create dates
-      let [s_time, f_time] = this.data[day];
-      let s_date = utils.createDate(s_time, day);
-      let f_date = utils.createDate(f_time, day);
+      let [init_time, end_time] = this.data[day];
+      let init_date = utils.createDate(init_time, day);
+      let end_date = utils.createDate(end_time, day);
 
-      // get range dates with current day
-      const range_dates = new Range(day);
+      const dates_range = new DateRange(day);
 
-      // get hours by range
-      const range_hours = range_dates.getHoursByRange(s_date, f_date);
+      const range_workhours = dates_range.getHoursByRange(init_date, end_date);
 
-      // build schema
-      work_hours[day] = range_hours;
+      workhours[day] = range_workhours;
     }
 
-    return work_hours;
+    return workhours;
   }
 
-  findRangePrice() {
-    let _week_hours = { ...this.calcWorkingHours() };
-    // create empty object
-    let _week_total_price = Object.create({});
+  /**
+   * calculates prices according to range of working hours and number of hours worked
+   * @returns {Object}
+   */
+  calcPricesByWorkHours() {
+    let workhours = { ...this.calcWorkHours() };
 
-    for (const day in _week_hours) {
-      const _day_hours = _week_hours[day];
+    let diary_price = Object.create({});
 
-      const price = new Price(day, _day_hours);
+    for (const day in workhours) {
+      const _hours_per_day = workhours[day];
 
-      _week_total_price[day] = price.calc;
+      const price = new Price(day, _hours_per_day);
+
+      diary_price[day] = price.calcPrices();
     }
 
-    return _week_total_price;
+    return diary_price;
   }
 }
 

@@ -1,10 +1,10 @@
-// ---------------------------
-// Author: Jerson Morocho
-// ---------------------------
+/**
+ * @author Jerson Morocho
+ */
 
 // declare modules
 
-const globals = require("../globals");
+const constants = require("../globals");
 
 class Employee {
   constructor(data) {
@@ -12,11 +12,11 @@ class Employee {
   }
 
   /**
-   * extract name from data string
-   * @returns NAME
+   * extract name from data input
+   * @returns {String} NAME
    */
   getName() {
-    let [_name] = this.data.match(globals.R_NAME);
+    let [_name] = this.data.match(constants.R_NAME);
 
     return _name;
   }
@@ -25,26 +25,23 @@ class Employee {
    * extract DAYS & WORK HOURS from data string
    * @returns {Object} `{ DAY: [START_HOUR, FINISH_HOUR], ... }`
    */
-  getWeekHours() {
-    // create empty object
-    let work_hours = Object.create({});
+  getWeeklyWorkHours() {
+    let weekly_workhours = Object.create({});
+
     // match all coincidences of week hours
-    let regex = new RegExp(globals.R_WORK_DAY, "g");
-    let _unformatted_week_hours = this.data.match(regex);
+    let r_workday = new RegExp(constants.R_WORKDAY, "g");
+    let _workdays = this.data.match(r_workday);
 
-    // iterate & format data
-    _unformatted_week_hours.forEach((item) => {
-      // extract coincidences of day & hours
-      let regex_day = new RegExp(globals.R_DAYS, "g");
-      let regex_hours = new RegExp(globals.R_HOURS, "g");
-      let day = item.match(regex_day);
-      let _hours = item.match(regex_hours);
+    _workdays.forEach((workday) => {
+      let r_day = new RegExp(constants.R_DAYS, "g");
+      let r_hours = new RegExp(constants.R_HOURS, "g");
+      let day = workday.match(r_day);
+      let _hours = workday.match(r_hours);
 
-      // build schema
-      work_hours[day] = _hours;
+      weekly_workhours[day] = _hours;
     });
 
-    return work_hours;
+    return weekly_workhours;
   }
 }
 

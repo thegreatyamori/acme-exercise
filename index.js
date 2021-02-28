@@ -26,17 +26,17 @@ exec("cls", (err, stdout, stderr) => {
     return;
   }
 
-  fs.readFile("init.txt", "utf-8", (err, data) => {
+  fs.readFile("front.txt", "utf-8", (err, console_face) => {
     if (err) throw err;
-    // print init.txt
-    console.log(data);
 
-    rl.question(`Path (test/employees.txt): `, (file) => {
-      // read file, return string
-      if (file === "") file = "test/employees.txt"
+    console.log(console_face);
+
+    rl.question(`Path (test/employees-6.txt): `, (file) => {
+      file = file === "" ? "test/employees-6.txt" : file;
 
       fs.readFile(file, "utf-8", (err, data) => {
         if (err) throw err;
+
         const input = new Input(data);
 
         input.process();

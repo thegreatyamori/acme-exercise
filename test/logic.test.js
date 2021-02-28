@@ -14,7 +14,7 @@ describe("Logic Bussiness", () => {
     input.forEach((item) => {
       const employee_test = new Employee(item);
 
-      expect(employee_test.getWeekHours()).toEqual(output);
+      expect(employee_test.getWeeklyWorkHours()).toEqual(output);
     });
   });
 
@@ -28,16 +28,17 @@ describe("Logic Bussiness", () => {
     };
 
     const output = {
-      MO: [0, 2, 0], // second_range
-      TU: [0, 2, 0], // second_range
-      TH: [2, 0, 0], // first_range
-      SA: [0, 4, 0], // second_range
-      SU: [0, 0, 1], // third_range
+      //  1️⃣ 2️⃣ 3️⃣ range
+      MO: [0, 2, 0],
+      TU: [0, 2, 0],
+      TH: [2, 0, 0],
+      SA: [0, 4, 0],
+      SU: [0, 0, 1],
     };
 
     const hour_test = new Hour(input);
 
-    expect(hour_test.calcWorkingHours()).toEqual(output);
+    expect(hour_test.calcWorkHours()).toEqual(output);
   });
 
   test("should find the price based by day", () => {
@@ -51,15 +52,14 @@ describe("Logic Bussiness", () => {
 
     const hour_test = new Hour(input);
 
-    expect(hour_test.findRangePrice()).toEqual(output);
+    expect(hour_test.calcPricesByWorkHours()).toEqual(output);
   });
 
   test("should make the payment calculation", () => {
     const input = { MO: 100, TH: 225, SA: 60 };
 
-    const total_test = Price.total(input);
+    const total_price_test = Price.total(input);
 
-
-    expect(total_test).toBe(385);
+    expect(total_price_test).toBe(385);
   });
 });

@@ -1,13 +1,12 @@
-// ---------------------------
-// Author: Jerson Morocho
-// ---------------------------
+/**
+ * @author Jerson Morocho
+ */
 
 // declare modules
 
-const globals = require("../globals");
 const utils = require("./utils");
 const Employee = require("./Employee");
-const WeekHour = require("./Hour");
+const Hour = require("./Hour");
 const Price = require("./Price");
 const Output = require("./output");
 
@@ -18,40 +17,32 @@ class Input {
 
   /**
    * Determine if input is a valid data
-   * @returns a boolean value
+   * @returns {Boolean} a boolean value
    */
   isValid() {
-    return utils.checkInput(this.data, globals.INPUT_REGEX, "gm");
+    return utils.isValidInput(this.data);
   }
 
   /**
-   * process input & send data to employee
+   * process input & send data to Employee
    */
   process() {
     if (this.isValid()) {
-      // split data
       let _data_employees = this.data.split("\n");
 
-      // send to Employee
       _data_employees.forEach((data) => {
-        // create Employee Object
         const employee = new Employee(data);
-        const work_hours = employee.getWeekHours();
+        const weekly_workhours = employee.getWeeklyWorkHours();
 
-        // create Hour Object
-        const _week_hours = new WeekHour(work_hours);
-        const week_hours = _week_hours.findRangePrice();
+        const hours = new Hour(weekly_workhours);
+        const weekly_workhours_prices = hours.calcPricesByWorkHours();
 
-        // calculate total
-        const total = Price.total(week_hours);
+        const total_payment = Price.total(weekly_workhours_prices);
 
-        // print output
-
-        Output.print(employee.getName(), total);
+        Output.print(employee.getName(), total_payment);
       });
     } else {
-      // TODO: Complete this
-      throw err;
+      throw new Error('Sorry, the input data is corrupted');
     }
   }
 }
